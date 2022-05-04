@@ -6,6 +6,7 @@ import { Solicitation } from './entity/solicitation.entity';
 import { SolicitationStatus } from './enum/solicitation-status.enum';
 import { CreditCardRequestDTO } from './types/credit-card-request.dto';
 import { UserService } from '../user/user.service';
+import { CreateUserDto } from 'src/user/types/create-user.dto';
 
 @Injectable()
 export class CreditCardService {
@@ -25,7 +26,7 @@ export class CreditCardService {
 
     if (userExist) {
       throw new BadRequestException('Usuário já existe na base de dados')
-    }
+    }    
 
     const user = await this.userService.createUser({
       name: creditCardRequestDTO.name,

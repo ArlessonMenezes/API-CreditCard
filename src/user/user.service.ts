@@ -13,8 +13,11 @@ export class UserService {
 
   async createUser(user: CreateUserDto) {
     const userCreate = this.userRepository.create(user)
-
     return await this.userRepository.save(userCreate); 
+  }
+
+  async getAllUsers() {
+    return await this.userRepository.find()
   }
 
   async verifyUserExist(email: string, cpf: string) {

@@ -18,7 +18,7 @@ export class AuthService {
 
     const payload = { sub: user.id, email: user.email }
       
-    return{
+    return {
       token: this.jwtService.sign(payload)
     }
   }
@@ -26,10 +26,10 @@ export class AuthService {
   async validateUser(email: string, password: string) {
     let user: User 
     
-    try{
+    try {
       user = await this.userService.findOneUserByEmail(email)
-  } catch (error) {
-    return null;
+  } catch (err) {
+      return null;
   }
 
     const passwordIsValid = await bcrypt.compare(password, user.password)

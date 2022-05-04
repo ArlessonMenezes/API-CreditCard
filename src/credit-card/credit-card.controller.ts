@@ -4,10 +4,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user/entity/user.entity';
 import { Repository } from 'typeorm';
 import { CreditCardRequestDTO } from './types/credit-card-request.dto';
-import { Solicitation } from './entity/solicitation.entity';
 import { CreditCardService } from './credit-card.service';
-import { userInfo } from 'os';
+import { IsPublic } from '../auth/types/is-public.decorator';
 
+@IsPublic()
 @ApiTags('Solicitção')
 @Controller('credit-card')
 export class CreditCardController {
