@@ -1,5 +1,7 @@
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { hashSync } from 'bcrypt';
+import { UserStatusEnum } from "../enum/user-status.enum";
+import { CreditCard } from "src/credit-card/entity/credit-card.entity";
 
 @Entity('users')
 export class User {
@@ -17,6 +19,9 @@ export class User {
 
     @Column({ unique: true })
     cpf: string;
+
+    @Column()
+    status: UserStatusEnum;
 
     @BeforeInsert()
     hashPassword(){

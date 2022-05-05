@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/user/entity/user.entity';
+import { User }  from 'src/user/entity/user.entity';
 import { Repository } from 'typeorm';
 import { CreditCardRequestDTO } from './types/credit-card-request.dto';
 import { CreditCardService } from './credit-card.service';

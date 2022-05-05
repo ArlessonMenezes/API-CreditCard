@@ -3,18 +3,22 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user/entity/user.entity';
 import { Repository } from 'typeorm';
 import { Solicitation } from './entity/solicitation.entity';
-import { SolicitationStatus } from './enum/solicitation-status.enum';
 import { CreditCardRequestDTO } from './types/credit-card-request.dto';
 import { UserService } from '../user/user.service';
-import { CreateUserDto } from 'src/user/types/create-user.dto';
+import { CreditCard } from './entity/credit-card.entity';
+import { addYears } from 'date-fns';
+import { BrandsEnum } from './enum/brands.enum';
+import generateCreditCard from './helpers/generate-credit-card.helper';
+import { SolicitationStatusEnum } from './enum/solicitation-status.enum';
+import { UserStatusEnum } from 'src/user/enum/user-status.enum';
 
 @Injectable()
 export class CreditCardService {
   constructor(
     @InjectRepository(Solicitation)
     private readonly solicitationRepository: Repository<Solicitation>,
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    @InjectRepository(CreditCard)
+    private readonly creditCardRepository: Repository<CreditCard>,
     private readonly userService: UserService,
   ){}
 
@@ -28,24 +32,43 @@ export class CreditCardService {
       throw new BadRequestException('Usuário já existe na base de dados')
     }    
 
+    const approved = this.isApproved();
+
     const user = await this.userService.createUser({
       name: creditCardRequestDTO.name,
       password: creditCardRequestDTO.password,
       email: creditCardRequestDTO.email,
       cpf: creditCardRequestDTO.cpf,
-     })
+      status: approved ? UserStatusEnum.ENABLE : UserStatusEnum.DESABLE, 
+    })
       
-    const approved = this.isApproved();
-
     const createSolicitation = this.solicitationRepository.create({
       preferredDueDay: creditCardRequestDTO.preferredDueDay,
       user: user,
-      status: approved? SolicitationStatus.APPROVED : SolicitationStatus.DENIED
+      status: approved? SolicitationStatusEnum.APPROVED : SolicitationStatusEnum.DENIED
     })
 
     await this.solicitationRepository.save(createSolicitation)
 
+    if (approved) {
+      this.generateCreditCardForApprovedSolicitation(user)
+    }
+
     return approved;
+  }
+
+  private async generateCreditCardForApprovedSolicitation(user: User) {
+    const DEFAULT_BRAND = BrandsEnum.VISA
+
+    return await this.creditCardRepository.save(
+      this.creditCardRepository.create({
+        valid_util: addYears(new Date(), 5),
+        number: generateCreditCard(DEFAULT_BRAND),
+        cvv: '000',
+        brand: DEFAULT_BRAND,
+        user,
+      })
+    )
   }
 
   private isApproved() {

@@ -1,6 +1,6 @@
 import { User } from "src/user/entity/user.entity";
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { SolicitationStatus } from "../enum/solicitation-status.enum";
+import { SolicitationStatusEnum } from "../enum/solicitation-status.enum";
 
 @Entity()
 export class Solicitation {
@@ -11,7 +11,7 @@ export class Solicitation {
     createdAt: Date;
 
     @Column()
-    status: SolicitationStatus;
+    status: SolicitationStatusEnum;
 
     @Column()
     preferredDueDay: number;

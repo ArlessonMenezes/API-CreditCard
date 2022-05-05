@@ -1,4 +1,4 @@
-export enum SolicitationStatus {
+export enum SolicitationStatusEnum {
   APPROVED = "APPROVED",
   DENIED = "DENIED",
 }
