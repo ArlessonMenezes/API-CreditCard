@@ -8,7 +8,7 @@ import { CreditCardService } from './credit-card.service';
 import { IsPublic } from '../auth/types/is-public.decorator';
 
 @IsPublic()
-@ApiTags('Solicitção')
+@ApiTags('Solicitation')
 @Controller('credit-card')
 export class CreditCardController {
   constructor(

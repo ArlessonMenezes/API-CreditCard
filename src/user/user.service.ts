@@ -16,10 +16,6 @@ export class UserService {
     return await this.userRepository.save(userCreate); 
   }
 
-  async getAllUsers() {
-    return await this.userRepository.find()
-  }
-
   async verifyUserExist(email: string, cpf: string) {
     const foundUserByEmail = await this.findAllUsersByEmail(email)
     const foundUserByCpf = await this.findAllUsersByCpf(cpf)
@@ -32,7 +28,9 @@ export class UserService {
   }
 
   async findOneUserByEmail(email: string) {
-    return await this.userRepository.findOne({ email })
+    const user = await this.userRepository.findOne({ email })
+    delete user.password
+    return user;
   }
 
   async findAllUsersByCpf(cpf: string) {

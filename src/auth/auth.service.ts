@@ -24,16 +24,13 @@ export class AuthService {
   }
 
   async validateUser(email: string, password: string) {
-    let user: User 
+    const user = await this.userService.findOneUserByEmail(email)  
     
-    try {
-      user = await this.userService.findOneUserByEmail(email)
-  } catch (err) {
-      return null;
-  }
+    if (!user) {
+      throw new UnauthorizedException()
+    }
 
     const passwordIsValid = await bcrypt.compare(password, user.password)
-    
     if (!passwordIsValid) return null
     
     return user

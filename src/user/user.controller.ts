@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -16,8 +16,8 @@ export class UserController {
     return 'Olá, Passei do AuthGuard!'
   }
 
-  @Get('all-users')
-  async getAllUsers() {
-    return await this.userService.getAllUsers()
+  @Get('profile-user')
+  async getAllUsers(@Query('email') email: string) {
+    return await this.userService.findOneUserByEmail(email)
   }
 }
