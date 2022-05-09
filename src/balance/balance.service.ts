@@ -1,0 +1,23 @@
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CreditCard } from 'src/credit-card/entity/credit-card.entity';
+import { Repository } from 'typeorm';
+
+@Injectable()
+export class BalanceService {
+  constructor(
+    @InjectRepository(CreditCard)
+    private readonly creditCardRepository: Repository<CreditCard>, 
+  ){}
+
+  async getBalanceCreditCard(creditCard: string) {
+
+    const creditCardFound = await this.creditCardRepository.findOne({number: creditCard})
+   
+    if (!creditCardFound) {
+      throw new BadRequestException('Este cartão não foi encontrado');
+    }
+
+    return creditCardFound.disponible
+  }
+}

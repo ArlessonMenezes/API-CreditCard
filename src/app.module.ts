@@ -8,6 +8,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { TransactionModule } from './transaction/transaction.module';
 import { StatementModule } from './statement/statement.module';
+import { BalanceModule } from './balance/balance.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { StatementModule } from './statement/statement.module';
       AuthModule,
       TransactionModule,
       StatementModule,
+      BalanceModule,
     ],
   controllers: [],
   providers: [{ provide: APP_GUARD, useClass: JwtAuthGuard }],
